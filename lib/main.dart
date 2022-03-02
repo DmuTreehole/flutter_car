@@ -97,11 +97,6 @@ class _MainPageState extends State<MainPage> {
         buf.codeUnits, Endpoint.broadcast(port: Port(serport)));
     log("$dataLength bytes sent.");
     sender.close();
-
-    /*
-    RawDatagramSocket rawDgramSocket = await RawDatagramSocket.bind('127.0.0.1', 8888);
-    rawDgramSocket.send(utf8.encode("hello,world!"), InternetAddress('192.168.1.107'), 7895);
-   */
   }
 
   // 移动函数布局
@@ -109,7 +104,7 @@ class _MainPageState extends State<MainPage> {
     return Column(
       children: <Widget>[
         // 向上
-        _move(() => _fn("up"), Icons.keyboard_arrow_up_sharp),
+        _move(() => _fn("up\n"), Icons.keyboard_arrow_up_sharp), //加入结束符 否则服务端不显示
         // 左右
         Container(
           margin: const EdgeInsets.symmetric(vertical: 70),
@@ -117,13 +112,13 @@ class _MainPageState extends State<MainPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _move(() => _fn("left"), Icons.arrow_back_ios_new_sharp),
-              _move(() => _fn("right"), Icons.arrow_forward_ios_sharp),
+              _move(() => _fn("left\n"), Icons.arrow_back_ios_new_sharp),
+              _move(() => _fn("right\n"), Icons.arrow_forward_ios_sharp), 
             ],
           ),
         ),
         // 向下
-        _move(() => _fn("back"), Icons.keyboard_arrow_down_sharp),
+        _move(() => _fn("back\n"), Icons.keyboard_arrow_down_sharp),
       ],
     );
   }
