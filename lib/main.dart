@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:udp/udp.dart';
 import 'joypad.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 
@@ -48,7 +50,7 @@ class PageTwo extends StatefulWidget {
 class _PageTwoState extends State<PageTwo> {
   var tip = "无操作";
   var speed = 400;
-
+  var serport = 7895;
   _show(Size size, var text) {
     return Container(
         decoration: BoxDecoration(
@@ -115,15 +117,13 @@ class _PageTwoState extends State<PageTwo> {
       children: [
         // 摇杆
         Joypad(
-          onChange: (Offset delta) {
-            setState(() {
-              tip = delta.toString();
-            });
-          },
+          onChange: (Offset delta) {_onchange(delta);},
         ),
         _speedbtn(Icons.stop_circle, () {
+          _send("stop\n");
           setState(() {
             speed = 0;
+            tip = "stop";
           });
         }),
 
@@ -145,6 +145,42 @@ class _PageTwoState extends State<PageTwo> {
         )
       ],
     );
+  }
+
+  _onchange(Offset delta) {
+    //log(delta.toString());
+    var x = delta.dx;
+    var y = delta.dy;
+    var mes = "";
+    if (x == 0 && y == 0) {
+      mes = "stop";
+    } else if (y < -15.0) {
+      log("up");
+      mes = "up";
+    } else if (y > 15.0) {
+      log("back");
+      mes = "back";
+    } else if (y > -15.0 && x < 0) {
+      log("left");
+      mes = "left";
+    } else if (y > -15.0 && x > 0) {
+      log("right");
+      mes = "right";
+    }
+
+    _send(mes + '\n');
+    setState(() {
+      tip = mes;
+    });
+  }
+
+  // 发送请求
+  _send(String buf) async {
+    var sender = await UDP.bind(Endpoint.any());
+    var dataLength = await sender.send(buf.codeUnits,
+        Endpoint.unicast(InternetAddress('192.168.1.1'), port: Port(serport)));
+    log("$dataLength bytes sent.");
+    sender.close();
   }
 
   @override
