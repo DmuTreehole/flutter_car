@@ -117,7 +117,9 @@ class _PageTwoState extends State<PageTwo> {
       children: [
         // 摇杆
         Joypad(
-          onChange: (Offset delta) {_onchange(delta);},
+          onChange: (Offset delta) {
+            _onchange(delta);
+          },
         ),
         _speedbtn(Icons.stop_circle, () {
           _send("stop\n");
@@ -131,12 +133,19 @@ class _PageTwoState extends State<PageTwo> {
         Column(
           children: [
             _speedbtn(Icons.arrow_upward_rounded, () {
+              if (speed % 50 == 0) {
+                _send("speedup\n");
+              }
               setState(() {
                 speed++;
               });
             }),
             SizedBox(height: size.height * 0.1),
             _speedbtn(Icons.arrow_downward_rounded, () {
+              if (speed == 0) return; // 最低为0
+              if (speed % 50 == 0) {
+                _send("speeddown\n");
+              }
               setState(() {
                 speed--;
               });
@@ -152,25 +161,32 @@ class _PageTwoState extends State<PageTwo> {
     var x = delta.dx;
     var y = delta.dy;
     var mes = "";
+    var v = 400;
     if (x == 0 && y == 0) {
       mes = "stop";
+      v = 0;
     } else if (y < -15.0) {
       log("up");
       mes = "up";
+      v = 400; 
     } else if (y > 15.0) {
       log("back");
       mes = "back";
+      v = 400; 
     } else if (y > -15.0 && x < 0) {
       log("left");
       mes = "left";
+      v = 400; 
     } else if (y > -15.0 && x > 0) {
       log("right");
+      v = 400; 
       mes = "right";
     }
 
     _send(mes + '\n');
     setState(() {
       tip = mes;
+      speed = v;
     });
   }
 
