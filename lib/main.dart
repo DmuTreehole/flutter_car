@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:udp/udp.dart';
 import 'joypad.dart';
-import 'package:holding_gesture/holding_gesture.dart';
+//import 'package:holding_gesture/holding_gesture.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,12 +66,13 @@ class _PageTwoState extends State<PageTwo> {
         )));
   }
 
-// 长按提速降速
+// 点按提速降速
   _speedbtn(IconData icon, Function fn) {
-    return HoldDetector(
-        onHold: () => fn(),
-        holdTimeout: const Duration(milliseconds: 10),
-        enableHapticFeedback: true,
+    return GestureDetector(
+        onLongPress: () => fn(),
+        onTapCancel: () => {
+              speedup = 0,
+            },
         child: Container(
           width: 80,
           height: 100,
