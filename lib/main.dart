@@ -51,6 +51,7 @@ class _PageTwoState extends State<PageTwo> {
   var tip = "无操作";
   var speed = 400;
   var serport = 7895;
+  var speedup = 0;
   _show(Size size, var text) {
     return Container(
         decoration: BoxDecoration(
@@ -133,11 +134,9 @@ class _PageTwoState extends State<PageTwo> {
         Column(
           children: [
             _speedbtn(Icons.arrow_upward_rounded, () {
-              if (speed % 50 == 0) {
-                _send("speedup\n");
-              }
+              _send("speedup\n");
               setState(() {
-                speed++;
+                speedup = 1;
               });
             }),
             SizedBox(height: size.height * 0.1),
@@ -168,25 +167,30 @@ class _PageTwoState extends State<PageTwo> {
     } else if (y < -15.0) {
       log("up");
       mes = "up";
-      v = 400; 
+      v = 400;
     } else if (y > 15.0) {
       log("back");
       mes = "back";
-      v = 400; 
+      v = 400;
     } else if (y > -15.0 && x < 0) {
       log("left");
       mes = "left";
-      v = 400; 
+      v = 400;
     } else if (y > -15.0 && x > 0) {
       log("right");
-      v = 400; 
+      v = 400;
       mes = "right";
     }
 
     _send(mes + '\n');
     setState(() {
-      tip = mes;
-      speed = v;
+      if (speedup == 1) {
+        tip = 'speedup';
+        speed = 800;
+      } else {
+        tip = mes;
+        speed = v;
+      }
     });
   }
 
