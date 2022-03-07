@@ -70,10 +70,15 @@ class _PageTwoState extends State<PageTwo> {
   _speedbtn(IconData icon, Function fn) {
     return GestureDetector(
         onLongPress: () => fn(),
-        onTapCancel: () => {
+        onLongPressEnd: (e) => {
+              print("end"),
               speed = 400,
               speedchange = 0,
             },
+        // onTapUp: () => {
+        //       speed = 400,
+        //       speedchange = 0,
+        //     },
         child: Container(
           width: 80,
           height: 100,
@@ -180,7 +185,6 @@ class _PageTwoState extends State<PageTwo> {
       v = 400;
       mes = "right";
     }
-
     _send(mes + '\n');
     setState(() {
       if (speedchange == 1) {
