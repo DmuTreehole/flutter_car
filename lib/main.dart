@@ -51,7 +51,7 @@ class _PageTwoState extends State<PageTwo> {
   var tip = "无操作";
   var speed = 400;
   var serport = 7895;
-  var speedup = 0;
+  var speedchange = 0;
   _show(Size size, var text) {
     return Container(
         decoration: BoxDecoration(
@@ -71,7 +71,8 @@ class _PageTwoState extends State<PageTwo> {
     return GestureDetector(
         onLongPress: () => fn(),
         onTapCancel: () => {
-              speedup = 0,
+              speed = 400,
+              speedchange = 0,
             },
         child: Container(
           width: 80,
@@ -137,17 +138,14 @@ class _PageTwoState extends State<PageTwo> {
             _speedbtn(Icons.arrow_upward_rounded, () {
               _send("speedup\n");
               setState(() {
-                speedup = 1;
+                speedchange = 1;
               });
             }),
             SizedBox(height: size.height * 0.1),
             _speedbtn(Icons.arrow_downward_rounded, () {
-              if (speed == 0) return; // 最低为0
-              if (speed % 50 == 0) {
-                _send("speeddown\n");
-              }
+              _send("speeddown\n");
               setState(() {
-                speed--;
+                speedchange = 2;
               });
             })
           ],
@@ -185,9 +183,12 @@ class _PageTwoState extends State<PageTwo> {
 
     _send(mes + '\n');
     setState(() {
-      if (speedup == 1) {
+      if (speedchange == 1) {
         tip = 'speedup';
         speed = 800;
+      } else if (speedchange == 2) {
+        tip = 'speeddown';
+        speed = 200;
       } else {
         tip = mes;
         speed = v;
