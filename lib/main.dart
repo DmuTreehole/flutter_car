@@ -49,6 +49,7 @@ class PageTwo extends StatefulWidget {
 
 class _PageTwoState extends State<PageTwo> {
   var tip = "无操作";
+  var time = 0;
   var speed = 400;
   var serport = 7895;
   var speedchange = 0;
@@ -69,9 +70,8 @@ class _PageTwoState extends State<PageTwo> {
 // 点按提速降速
   _speedbtn(IconData icon, Function fn) {
     return GestureDetector(
-        onLongPress: () => fn(),
+        onLongPressStart: (e) => fn(),
         onLongPressEnd: (e) => {
-              print("end"),
               speed = 400,
               speedchange = 0,
             },
@@ -106,6 +106,7 @@ class _PageTwoState extends State<PageTwo> {
             children: [
               _show(size, speed),
               _show(size, tip),
+              _show(size, time),
             ],
           ),
           SizedBox(
@@ -130,10 +131,10 @@ class _PageTwoState extends State<PageTwo> {
           },
         ),
         _speedbtn(Icons.stop_circle, () {
-          _send("stop\n");
+          _send("autoforward\n");
           setState(() {
-            speed = 0;
-            tip = "stop";
+            speed = 400;
+            tip = "autoforward";
           });
         }),
 
@@ -141,14 +142,18 @@ class _PageTwoState extends State<PageTwo> {
         Column(
           children: [
             _speedbtn(Icons.arrow_upward_rounded, () {
-              _send("speedup\n");
+              for (var i = 1; i < 10; i++) {
+                _send("speedup\n");
+              }
               setState(() {
                 speedchange = 1;
               });
             }),
             SizedBox(height: size.height * 0.1),
             _speedbtn(Icons.arrow_downward_rounded, () {
-              _send("speeddown\n");
+              for (var i = 1; i < 10; i++) {
+                _send("speeddown\n");
+              }
               setState(() {
                 speedchange = 2;
               });
@@ -191,7 +196,7 @@ class _PageTwoState extends State<PageTwo> {
         tip = 'speedup';
         speed = 800;
       } else if (speedchange == 2) {
-        tip = 'speeddown';
+        tip = 'stop';
         speed = 200;
       } else {
         tip = mes;
