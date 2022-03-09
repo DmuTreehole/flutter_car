@@ -92,6 +92,27 @@ class _PageTwoState extends State<PageTwo> {
         ));
   }
 
+// 点按开始
+  _autospeed(IconData icon, Function fn) {
+    return GestureDetector(
+        onTap: () => fn(),
+        // onTapUp: () => {
+        //       speed = 400,
+        //       speedchange = 0,
+        //     },
+        child: Container(
+          width: 80,
+          height: 100,
+          decoration: BoxDecoration(
+              color: const Color(0x88ffffff),
+              borderRadius: BorderRadius.circular((20))),
+          child: Icon(
+            icon,
+            size: 50,
+          ),
+        ));
+  }
+
   Padding _content(Size size) {
     return Padding(
       // 上下位置
@@ -130,8 +151,8 @@ class _PageTwoState extends State<PageTwo> {
             _onchange(delta);
           },
         ),
-        _speedbtn(Icons.stop_circle, () {
-          _send("autoforward\n");
+        _autospeed(Icons.stop_circle, () {
+          _send("auto\n");
           setState(() {
             speed = 400;
             tip = "autoforward";
