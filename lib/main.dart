@@ -240,7 +240,7 @@ class _PageTwoState extends State<PageTwo> {
 
   //接收请求
   _receive(String buf) async {
-    var receiver = await UDP.bind(Endpoint.any());
+    var receiver = await UDP.bind(Endpoint.loopback(port: Port(7856)));
     receiver.asStream(timeout: Duration(seconds: 200)).listen((datagram) {
       if (datagram != null) {
         buf = String.fromCharCodes(datagram.data);
