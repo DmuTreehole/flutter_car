@@ -243,11 +243,11 @@ class _PageTwoState extends State<PageTwo> {
     var receiver = await UDP.bind(Endpoint.loopback(port: Port(7856)));
     receiver.asStream(timeout: Duration(seconds: 200)).listen((datagram) {
       if (datagram != null) {
+        log("收到数据包\n");
         buf = String.fromCharCodes(datagram.data);
         if (buf == 'complete\n') {
           //避障完成一次，记录
           time++;
-          log("收到数据包\n");
         }
       }
     });
