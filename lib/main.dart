@@ -54,7 +54,7 @@ class _PageTwoState extends State<PageTwo> {
   var speed = 400;
   var serport = 7895;
   var speedchange = 0;
-  String buf="";
+  String buf = "";
   _show(Size size, var text) {
     return Container(
         decoration: BoxDecoration(
@@ -154,8 +154,8 @@ class _PageTwoState extends State<PageTwo> {
           },
         ),
         _autospeed(Icons.stop_circle, () {
-          _send("auto\n");//发包给后端
-          _receive(buf);//接收数据包
+          _send("auto\n"); //发包给后端
+          _receive(buf); //接收数据包
           setState(() {
             speed = 400;
             tip = "autoforward";
@@ -247,6 +247,7 @@ class _PageTwoState extends State<PageTwo> {
         if (buf == 'complete\n') {
           //避障完成一次，记录
           time++;
+          log("收到数据包\n");
         }
       }
     });
