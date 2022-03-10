@@ -131,10 +131,10 @@ class _PageTwoState extends State<PageTwo> {
           },
         ),
         _speedbtn(Icons.stop_circle, () {
-          _send("autoforward\n");
+          _send("auto\n");
           setState(() {
             speed = 400;
-            tip = "autoforward";
+            tip = "auto";
           });
         }),
 
