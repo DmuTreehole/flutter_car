@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -240,14 +239,19 @@ class _PageTwoState extends State<PageTwo> {
 
   //接收请求
   _receive(String buf) async {
-    var receiver = await UDP.bind(Endpoint.loopback(port: Port(7856)));
+    log("1\n");
+    var receiver = await UDP.bind(Endpoint.any(port: const Port(7856)));
+    log("2\n");
     receiver.asStream(timeout: Duration(seconds: 200)).listen((datagram) {
+      log("3\n");
       if (datagram != null) {
         log("收到数据包\n");
         buf = String.fromCharCodes(datagram.data);
         if (buf == 'complete\n') {
           //避障完成一次，记录
-          time++;
+          setState(() {
+            time++;
+          });
         }
       }
     });
